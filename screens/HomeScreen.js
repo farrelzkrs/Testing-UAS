@@ -27,7 +27,6 @@ export default function HomeScreen({ navigation }) {
             style={styles.card}
             onPress={() => navigation.navigate("FoodDetail", { id: item.id })}
           >
-             {/* Jika ada gambar, tampilkan. Ganti logic URL sesuai path server */}
              {item.image && (
                 <Image source={{uri: `${API_BASE}/images/${item.image}`}} style={styles.thumb} />
              )}

@@ -1,4 +1,3 @@
-// utils/api.js
 import { API_BASE } from "../config/api";
 
 export async function postJSON(path, body, token = null) {

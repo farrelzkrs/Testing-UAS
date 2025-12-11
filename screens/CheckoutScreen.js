@@ -27,7 +27,6 @@ export default function CheckoutScreen({ route, navigation }) {
         return;
     }
     
-    // Kirim data sebagai array items
     const items = [{ food_id: food.id, qty: Number(qty) }];
     const res = await postJSON("add_order.php", { items }, token);
 
