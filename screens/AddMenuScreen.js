@@ -8,7 +8,7 @@ export default function AddMenuScreen({ navigation }) {
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
   const [price, setPrice] = useState("");
-  const [restaurantId, setRestaurantId] = useState("1"); // Hardcoded contoh
+  const [restaurantId, setRestaurantId] = useState("1");
   const [image, setImage] = useState(null);
 
   const pickImage = async () => {
@@ -38,31 +38,39 @@ export default function AddMenuScreen({ navigation }) {
     if (image) {
       const filename = image.split("/").pop();
       const match = /\.(\w+)$/.exec(filename);
-      const type = match ? `image/${match[1]}` : "image";
-      // React Native FormData format untuk file
+      const type = match ? `image/${match[1]}` : "image/jpeg";
       form.append("image", { uri: image, name: filename, type });
     }
 
     try {
+      console.log("Sedang upload ke:", `${API_BASE}/add_food.php`);
+      
       const res = await fetch(`${API_BASE}/add_food.php`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
         },
         body: form,
       });
-      const json = await res.json();
-      
-      if (json.success) {
-        Alert.alert("Sukses", json.message);
-        navigation.goBack();
-      } else {
-        Alert.alert("Gagal", json.message || "error");
+
+      const textResult = await res.text();
+      console.log("Respon Server:", textResult);
+
+      try {
+        const json = JSON.parse(textResult);
+        if (json.success) {
+          Alert.alert("Sukses", json.message);
+          navigation.goBack();
+        } else {
+          Alert.alert("Gagal dari Server", json.message || "Unknown error");
+        }
+      } catch (e) {
+        Alert.alert("Error Parsing", "Server tidak mengirim JSON. Cek log.");
       }
+
     } catch (e) {
-      console.log(e);
-      Alert.alert("Error", "Tidak bisa connect ke server");
+      console.error(e);
+      Alert.alert("Error Koneksi", "Gagal menghubungi server");
     }
   };
 

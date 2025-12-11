@@ -33,7 +33,7 @@ export default function CheckoutScreen({ route, navigation }) {
 
     if (res.success) {
       Alert.alert("Sukses", "Pesanan dibuat", [
-        { text: "OK", onPress: () => navigation.navigate("Orders") },
+        { text: "OK", onPress: () => navigation.navigate('MainTabs', { screen: 'Orders' }) },
       ]);
     } else {
       Alert.alert("Gagal", res.message || "Error");
